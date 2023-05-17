@@ -29,17 +29,6 @@ const todoSchema = new mongoose.Schema({
 const Todo = mongoose.model('Todo', todoSchema);
 
 
-const start = async () => {
-  try {
-    if (!process.env.MD_CONNECTION) return
-    await mongoose.connect(process.env.MD_CONNECTION || "")
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-start();
-
 const magic = new Magic(process.env.MAGIC_SECRET_KEY);
 
 app.use(cors({ origin: process.env.CLIENT_URL }));
@@ -125,6 +114,15 @@ if (process.env.NODE_ENV === 'deployed') {
   });
 }
 
-const listener = app.listen(process.env.PORT || 8080, () =>
-  console.log('Listening on port ' + listener.address().port)
-);
+const start = async () => {
+  try {
+    if (!process.env.MD_CONNECTION) return
+    await mongoose.connect(process.env.MD_CONNECTION || "")
+    app.listen(process.env.PORT || 8080, () =>
+    console.log('Listening ..'))
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+start();
