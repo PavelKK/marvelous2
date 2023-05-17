@@ -36,7 +36,6 @@ const start = async () => {
     await mongoose.connect(process.env.MD_CONNECTION || "")
   } catch (error) {
     console.error(error);
-    process.exit(1);
   }
 };
 
