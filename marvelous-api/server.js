@@ -117,7 +117,7 @@ if (process.env.NODE_ENV === 'deployed') {
 const start = async () => {
   try {
     if (!process.env.MD_CONNECTION) return
-    await mongoose.connect(process.env.MD_CONNECTION || "")
+    await mongoose.connect(process.env.MD_CONNECTION || "", {useNewUrlParser: true, useUnifiedTopology: true})
     app.listen(process.env.PORT || 8080, () =>
     console.log('Listening ..'))
   } catch (error) {
