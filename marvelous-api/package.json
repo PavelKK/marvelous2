@@ -4,7 +4,7 @@
     "description": "check this out",
     "main": "server.js",
     "engines": {
-        "node": ">=18"
+        "node": ">=16 <17"
     },
     "scripts": {
         "start": "node server.js",
