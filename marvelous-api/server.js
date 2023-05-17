@@ -109,12 +109,11 @@ app.delete('/todos/deleteall', (req, res) => {
     });
 });
 
-if (process.env.NODE_ENV === 'deployed') {
-  app.use(express.static('build'));
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
-  });
-}
+
+app.use(express.static('build'));
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+});
 
 const start = async () => {
   try {

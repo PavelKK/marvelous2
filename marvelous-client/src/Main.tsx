@@ -15,7 +15,7 @@ export const Main: FC = () => {
   const [user, setUser] = useContext(UserContext);
   const [newTodo, setNewTodo] = useState<string>("");
   const [search, setSearch] = useState<string>("");
-  const host = process.env.REACT_APP_SERVER_URL;
+  const host = ""
   const fetcher = !user?.email
     ? () => Promise.resolve([])
     : (url: string) =>
