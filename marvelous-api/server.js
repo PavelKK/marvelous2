@@ -96,6 +96,7 @@ app.post('/todos/toggle', (req, res) => {
 
 app.delete('/todos/deleteall', (req, res) => {
   const author = req.headers?.author
+  console.log("TRYING TO DELETE ALL TASKS")
   Todo.deleteMany({ author })
     .then((result) => {
       if (result.deletedCount === 0) {
