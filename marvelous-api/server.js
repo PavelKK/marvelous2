@@ -31,8 +31,9 @@ const Todo = mongoose.model('Todo', todoSchema);
 
 const start = async () => {
   try {
-    await mongoose.connect(process.env.MD_CONNECTION || "")
     console.log("🚀 ~ file: server.js:35 ~ start ~ process.env.MD_CONNECTION:", process.env.MD_CONNECTION)
+    if (!process.env.MD_CONNECTION) return
+    await mongoose.connect(process.env.MD_CONNECTION || "")
   } catch (error) {
     console.error(error);
     process.exit(1);
