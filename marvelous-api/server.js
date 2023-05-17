@@ -19,6 +19,10 @@ const todoSchema = new mongoose.Schema({
   task: {
     type: String,
     required: true
+  },
+  done: {
+    type: Boolean,
+    required: false
   }
 });
 
@@ -39,6 +43,7 @@ start();
 const magic = new Magic(process.env.MAGIC_SECRET_KEY);
 
 app.use(cors({ origin: process.env.CLIENT_URL }));
+app.use(express.json());
 
 app.post('/api/login', async (req, res) => {
   try {
@@ -51,10 +56,13 @@ app.post('/api/login', async (req, res) => {
 });
 
 app.post('/todos', (req, res) => {
-  const { author, task } = req.body;
+  const author = req.headers?.author
+  const { task } = req.body;
   const newTodo = new Todo({
     author,
-    task
+    task,
+    done: false,
+    time: new Date()
   });
   newTodo.save()
     .then((savedTodo) => {
@@ -66,7 +74,8 @@ app.post('/todos', (req, res) => {
 });
 
 app.get('/todos', (req, res) => {
-  Todo.find()
+  const author = req.headers?.author
+  Todo.find({author})
     .then((todos) => {
       res.json(todos);
     })
@@ -75,24 +84,28 @@ app.get('/todos', (req, res) => {
     });
 });
 
-app.delete('/todos/:id', (req, res) => {
-  const todoId = req.params.id;
-
-  Todo.findByIdAndDelete(todoId)
-    .then((deletedTodo) => {
-      if (!deletedTodo) {
-        return res.status(404).json({ error: 'Todo not found' });
-      }
-      res.json(deletedTodo);
-    })
-    .catch((error) => {
-      res.status(500).json({ error: 'Error deleting todo' });
+app.post('/todos/toggle', (req, res) => {
+  // SWITCH DONE
+  const todoId = req.body.id;
+  console.log("🚀 ~ file: server.js:92 ~ app.post ~ todoId:", todoId)
+  Todo.findOneAndUpdate(
+    { _id: todoId },
+    // { $set: { done: { $not: "$done" } } },
+    [{$set:{done:{$eq:[false,"$done"]}}}],
+    { new: false }
+  ).then((updatedTodo) => {
+    if (!updatedTodo) {
+      return res.status(404).json({ error: 'Todo not found' });
+    } else {
+      res.json(updatedTodo)
+    }
+    }).catch((error) => {
+      res.status(500).json({ error: 'Error swithing todo' });
     });
 });
 
-app.delete('/todos/deleteall/:author', (req, res) => {
-  const author = req.params.author;
-
+app.delete('/todos/deleteall', (req, res) => {
+  const author = req.headers?.author
   Todo.deleteMany({ author })
     .then((result) => {
       if (result.deletedCount === 0) {

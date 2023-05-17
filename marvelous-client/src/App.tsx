@@ -26,7 +26,7 @@ export const magic = new Magic("pk_live_7331486CE62E7A3E", {
   extensions: [new OAuthExtension()],
 });
 
-interface UserState extends Partial<MagicUserMetadata> {
+export interface UserState extends Partial<MagicUserMetadata> {
   loading?: boolean;
   user?: unknown;
 }

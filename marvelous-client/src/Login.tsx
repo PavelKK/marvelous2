@@ -83,7 +83,6 @@ export const Login: FC = () => {
           margin: 25px 0;
         }
         .input-wrapper {
-          width: 80%;
           margin: 0 auto 20px;
         }
       `}</style>
