@@ -4,19 +4,19 @@
     "description": "check this out",
     "main": "server.js",
     "engines": {
-      "node": ">=18"
+        "node": ">=18"
     },
     "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1",
-      "start": "node server.js",
-      "build": ""
+        "start": "node server.js",
+        "build": ""
     },
     "author": "Pavel",
     "license": "MIT",
     "dependencies": {
-      "@magic-sdk/admin": "^1.3.0",
-      "express": "^4.17.1",
-      "cors": "^2.8.5",
-      "dotenv": "^8.2.0"
+        "@magic-sdk/admin": "^1.3.0",
+        "cors": "^2.8.5",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "mongoose": "^7.1.1"
     }
-  }
+}
