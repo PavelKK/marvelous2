@@ -64,6 +64,7 @@ app.post('/todos', (req, res) => {
 
 app.get('/todos', (req, res) => {
   const author = req.headers?.author
+  console.log("🚀 ~ file: server.js:67 ~ app.get ~ author:", author)
   Todo.find({author})
     .then((todos) => {
       res.json(todos);
