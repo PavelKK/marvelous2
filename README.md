@@ -8,9 +8,9 @@ Welcome to the Marvelous project! This repository contains the server-side and c
 
 The `marvelous-api` directory contains the server-side code for the Marvelous application. It is implemented using JavaScript and TypeScript. This directory houses the backend logic and APIs that power the application. In order to run the server, please create .env file in the directory and add the following .env:
 
-MAGIC_SECRET_KEY=<key from magic>
-CLIENT_URL=<server url>
-MD_CONNECTION=<connection string>
+MAGIC_SECRET_KEY=key_from_magic
+CLIENT_URL=http://your-client-url
+MD_CONNECTION=connection_string
 
 ### `marvelous-client`
 
