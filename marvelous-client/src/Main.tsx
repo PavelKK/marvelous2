@@ -2,8 +2,9 @@ import React, { FC, useContext, useEffect, useState } from "react";
 import { magic, UserContext } from "./App";
 import { Header } from "./Header";
 import useSWR from "swr";
+import { Todos } from "./Todos";
 
-interface Todo {
+export interface Todo {
   _id: string;
   time: number;
   task: string;
@@ -11,23 +12,26 @@ interface Todo {
   done: boolean;
 }
 
+
+
 export const Main: FC = () => {
   const [user, setUser] = useContext(UserContext);
   const [newTodo, setNewTodo] = useState<string>("");
   const [search, setSearch] = useState<string>("");
-  const host = ""
   const fetcher = !user?.email
     ? () => Promise.resolve([])
     : (url: string) =>
         fetch(url, { headers: { author: user?.email ?? "" } }).then((res) =>
           res.json()
         );
-  const { data: allTodos, error, mutate } = useSWR(host + "/todos", fetcher);
-  const todos = allTodos ? allTodos.filter((t: Todo) => t.task.includes(search)) : []
+  const { data: allTodos, error, mutate } = useSWR("/todos", fetcher);
+  const todos = allTodos
+    ? allTodos.filter((t: Todo) => t.task.includes(search))
+    : [];
   const createTodo = async () => {
     if (!user?.email || !newTodo) return;
     const addedTodo = { task: newTodo };
-    await fetch(host + "/todos", {
+    await fetch("/todos", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -40,7 +44,7 @@ export const Main: FC = () => {
   };
   const removeAll = async () => {
     if (!user?.email) return;
-    await fetch(host + "/todos/deleteall", {
+    await fetch("/todos/deleteall", {
       method: "DELETE",
       headers: {
         author: user?.email,
@@ -50,7 +54,7 @@ export const Main: FC = () => {
   };
   const toggleTodo = async (id: string) => {
     if (!user?.email) return;
-    await fetch(host + "/todos/toggle", {
+    await fetch("/todos/toggle", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -71,7 +75,7 @@ export const Main: FC = () => {
     });
   };
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       createTodo();
     }
   };
@@ -83,7 +87,7 @@ export const Main: FC = () => {
       ) : (
         <div>
           <div className="TodoHeader">
-            <h2>Marvelous v2.0</h2>
+            <h1>Marvelous v2.0</h1>
             <div>
               <span onClick={removeAll}>Delete all tasks</span>
             </div>
@@ -115,27 +119,12 @@ export const Main: FC = () => {
           </div>
           <div className="Container">
             <div>
-              <h3>To Do</h3>
+              <h2>To Do</h2>
               <div className="line" />
-              <ul>
-                {todos
-                  .filter((todo: Todo) => !todo.done)
-                  .sort((a: Todo, b: Todo) => a.task.localeCompare(b.task))
-                  .map((todo: Todo) => (
-                    <li key={todo._id}>
-                      <input
-                        readOnly
-                        type={"checkbox"}
-                        onClick={() => toggleTodo(todo._id)}
-                        checked={todo.done}
-                      />
-                      {todo.task}
-                    </li>
-                  ))}
-              </ul>
+              <Todos todos={todos} toggleTodo={toggleTodo}/>
             </div>
             <div>
-              <h3>Done</h3>
+              <h2>Done</h2>
               <div className="line" />
               <ul>
                 {todos
@@ -178,7 +167,7 @@ export const Main: FC = () => {
         .Container {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          grid-gap: 1rem;
+          grid-gap: 2rem;
           margin: 2rem auto;
         }
         .Container > div button{
@@ -188,6 +177,7 @@ export const Main: FC = () => {
           width: 100%;
           max-width: 15rem;
           margin: .5rem 1rem .5rem 0;
+          height: 1.5rem;
         }
         .Search {
           text-align: center;
@@ -203,10 +193,13 @@ export const Main: FC = () => {
         }
         li {
           position: relative;
+          font-size: 1.2rem;
         }
         input[type="checkbox"] {
           position: absolute;
-          left: -25px;
+          left: -2rem;
+          width: 1.2rem;
+          height: 1.2rem;
           top: 2px;
         }
       `}</style>
